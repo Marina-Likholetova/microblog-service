@@ -1,5 +1,9 @@
 extends layout.pug
 
+block headContent 
+    script(type="module" src="/deleteButtons.js")
+    script(type="module" src="/commentForm.js") 
+
 block content
     .main-content
         block mainContent
