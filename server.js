@@ -11,10 +11,14 @@ const { api } = require("./routers/api/");
 const app = express();
 app.listen(srvConfig.port, () => logger.info(`Start listening on [${srvConfig.port}] port`))
 
+app.set('view engine', 'pug');
+
 app.use(morgan(mrgConfig.format));
 app.use(morgan(mrgConfig.format, { stream }));
-app.use(express.json());
 
+app.use(express.static("static"));
+
+app.use(express.json());
 
 app.use("/api/users", api.userRouter);
 app.use("/api/posts", api.postRouter);

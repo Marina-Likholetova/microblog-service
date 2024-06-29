@@ -1,0 +1,27 @@
+include commentForm
+include commentsList
+include deleteButton
+
+mixin PostItem({ post, withActionPanel, isPostDetails })
+    .post
+        .post__info
+            if !isPostDetails
+                a(href=`/blog/post-details/${post.id}`)
+            .post__header
+                .post__author
+                    - var defaultImg = "https://www.gravatar.com/avatar/b0cb6e7e381a708f71dd434d3113000d3fa9bdf59cb6e419604fe862e23a67e2?s=60&d=monsterid"
+                        img.author__avatar(src=post.author.user_avatar || defaultImg, alt="Author Avatar")
+                    .author__details
+                        span=post.author.username
+                        span=post.createdAt.toUTCString()
+                if withActionPanel
+                    .post__service
+                        +DeleteButton(post)
+            h3.post__title=post.title 
+            .post__content
+                p=post.content
+        .post__comments
+            h3 Comments
+            +CommentsList({comments: post.comments})
+            if isLoggedIn
+                +CommentForm(post.id)

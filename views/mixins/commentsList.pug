@@ -1,0 +1,9 @@
+include commentItem
+
+mixin CommentsList({ comments })
+    if comments.length > 0
+        each comment in comments
+            +CommentItem({ comment })
+    else 
+        p No comments yet
+        

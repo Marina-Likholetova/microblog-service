@@ -1,0 +1,11 @@
+extends ../layouts/main-layout.pug
+
+include ../mixins/postsList
+
+block mainContent
+    br
+    a(href="/blog/add-post") Add post 
+    .my-post_content
+        +PostsList({ withActionPanel: true })           
+   
+                    

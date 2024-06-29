@@ -1,0 +1,10 @@
+extends ../layouts/main-layout.pug
+
+include ../mixins/postItem
+include ../mixins/commentsList
+include ../mixins/commentForm
+
+
+block mainContent
+    +PostItem({ post, withActionPanel: true, isPostDetails: true})
+        

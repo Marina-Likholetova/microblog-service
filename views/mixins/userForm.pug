@@ -1,0 +1,19 @@
+mixin UserForm({ btnSubmitText })
+    .form-container
+        form(method="POST")
+            .group
+                label(for="username") Username
+                input(type="text" placeholder="enter the username" value=data && data.username name="username")
+                if errors && errors.username
+                    each error in errors.username
+                        .form-error=error
+            .group
+                label(for="password") Password
+                input(type="password" placeholder="enter your password" name="password")
+                if errors && errors.password
+                    each error in errors.password
+                        .form-error=error
+            if errors && errors.auth
+                .form-error=errors.auth
+            button(type="submit" class="btn")=btnSubmitText
+            button(type="reset" class="btn") Cancel

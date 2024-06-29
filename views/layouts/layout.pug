@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(href="/favicon.ico" rel="icon" type="image/x-icon")
+ 
+        title Microblog
+        block headContent
+    body
+        .container
+            .header
+                .navbar
+                    a(href="/blog") Home Page
+                    a(href="/blog/my-posts") My Posts
+                    if isLoggedIn === true
+                        span=`Hi, ${username}`
+                        a(href="/blog/logout") Logout
+                    else
+                        a(href="/blog/login") Login
+                        a(href="/blog/signup") Sign Up
+
+            block content

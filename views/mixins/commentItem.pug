@@ -1,0 +1,15 @@
+include deleteButton
+
+mixin CommentItem({ comment }) 
+    .comment
+        .comment__info
+            .comment__author
+                - var defaultImg = "https://www.gravatar.com/avatar/b0cb6e7e381a708f71dd434d3113000d3fa9bdf59cb6e419604fe862e23a67e2?s=60&d=monsterid"
+                    img.author__avatar(src=comment.author.user_avatar || defaultImg, alt="Author Avatar")
+                .author__details
+                    span=comment.author.username 
+                    span=comment.createdAt.toUTCString()
+            .comment__service 
+                +DeleteButton(comment)
+        .comment__content
+            span=comment.comment

@@ -1,0 +1,12 @@
+mixin CommentForm(postId)
+    .add-comment-section
+        .comment__info
+            .comment__author
+                img.author__avatar(src=user_avatar, alt="Author Avatar")
+                .author__details
+                    span=username 
+        .comment-form
+            form(action="/blog/add-comment", method="post")
+                input(type="hidden" name="postId" value=postId)
+                textarea(name="comment", cols="30", rows="10" value=data && data.content) 
+                button(type="submit") Send

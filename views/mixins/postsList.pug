@@ -1,0 +1,11 @@
+include postItem
+include commentForm
+include commentItem
+include commentsList
+include deleteButton
+
+mixin PostsList(props)
+    ul.postsList
+        each post in postsList
+            li
+                +PostItem({ post , ...props})

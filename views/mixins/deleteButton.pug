@@ -1,0 +1,8 @@
+mixin DeleteButton(item)
+    if item.author.id === userId
+        //- button.delete-btn.btn(type="button" data-id=item.id) Delete
+        .dropdown
+            button.dropdown-toggle(type="button" aria-haspopup="true" aria-expanded="false")
+                span.menu-icon &#x22EE
+            .dropdown-menu
+                button.delete-btn.btn(type="button" data-id=item.id) Delete

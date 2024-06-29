@@ -1,0 +1,17 @@
+extends ../layouts/main-layout
+
+block mainContent 
+    .form-container
+        form(method="POST")
+            .group
+                label(for="title") Title
+                input(type="text" placeholder="enter the title" value=data && data.title name="title" required)
+                if errors && errors.title
+                    .form-error= errors.title
+            .group
+                label(for="content") Content
+                textarea(name="content", cols="30", rows="10") 
+                if errors && errors.content
+                    .form-error= errors.content
+            button(type="submit" class="btn") Post
+            button(type="reset" class="btn") Cancel
