@@ -6,6 +6,7 @@ const pagesController = require("../controllers/pages_controller");
 const { logUserIn, signUserUp } = require("../controllers/auth_controller");
 const { authIniteSessionAndRedirect, authDestroySessionAndRedirect } = require("../middlewares/authContext");
 const { ValidationError, AuthError } = require("../errors");
+const { userDataValidator, idValidator, postDataValidator, commentDataValidator } = require("../middlewares/validators");
 
 
 async function formErrorHandler(err, req, _resp, next) {
@@ -37,6 +38,7 @@ pagesRouter.route("/login")
     .get(pagesController.renderPage("pages/login"))
     .post(
         formDataParser,
+        userDataValidator,
         logUserIn,
         authIniteSessionAndRedirect(),
         formErrorHandler,
@@ -47,6 +49,7 @@ pagesRouter.route("/signup")
     .get(pagesController.renderPage("pages/signup"))
     .post(
         formDataParser,
+        userDataValidator,
         signUserUp,
         authIniteSessionAndRedirect(),
         formErrorHandler,
@@ -62,6 +65,7 @@ pagesRouter.get("/my-posts",
 )
 
 pagesRouter.get("/post-details/:postId",
+    idValidator.postId,
     pagesController.getPostById,
     pagesController.renderPage("pages/post-details")
 )
@@ -73,6 +77,7 @@ pagesRouter.route("/add-post")
     .get(pagesController.renderPage("pages/add-post"))
     .post(
         formDataParser,
+        postDataValidator,
         pagesController.createNewPost,
         formErrorHandler,
         pagesController.renderPage("pages/add-post")
@@ -81,6 +86,7 @@ pagesRouter.route("/add-post")
 pagesRouter.post("/add-comment",
     pagesController.checkAuth,
     formDataParser,
+    commentDataValidator,
     pagesController.createNewComment,
     formErrorHandler,
     (_req, resp, _next) => {
