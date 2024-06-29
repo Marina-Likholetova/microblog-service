@@ -97,6 +97,11 @@ pagesRouter.post("/add-comment",
     }
 )
 
+pagesRouter.use(pagesController.renderPage("pages/404"));
+
+pagesRouter.use((err, _req, resp, _next) => {
+    resp.render("pages/500");
+});
 
 module.exports = {
     pagesRouter
