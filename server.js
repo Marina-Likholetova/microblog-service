@@ -6,6 +6,7 @@ const morgan = require("morgan");
 
 const logger = require("./utils/logger")("server");
 const { stream } = require("./utils/logStreamConfig");
+const { sessionMiddleware } = require("./session");
 const { api } = require("./routers/api/");
 
 const app = express();
@@ -15,6 +16,8 @@ app.set('view engine', 'pug');
 
 app.use(morgan(mrgConfig.format));
 app.use(morgan(mrgConfig.format, { stream }));
+
+app.use(sessionMiddleware);
 
 app.use(express.static("static"));
 

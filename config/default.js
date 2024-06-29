@@ -9,5 +9,17 @@ module.exports = {
     },
     morgan: {
         format: process.env.MORGAN_FORMAT || "dev",
+    },
+    db: {
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        name: process.env.DB_NAME,
+        dbType: process.env.DATABASE_URL.includes("mongo") ? "mongo" : "sql",
+    },
+    session: {
+        secureCookie: isProd,
+        cookieName: "sid",
+        secret: process.env.SESSION_SECRET || Math.random().toString(36).slice(2),
     }
 };
