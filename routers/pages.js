@@ -4,7 +4,7 @@ const pagesRouter = express.Router();
 const formDataParser = express.urlencoded({ extended: false });
 const pagesController = require("../controllers/pages_controller");
 const { logUserIn, signUserUp } = require("../controllers/auth_controller");
-const { authIniteSessionAndRedirect, authDestroySessionAndRedirect } = require("../middlewares/authContext");
+const { authIniteSessionAndRedirect, authDestroySessionAndRedirect, restrictResource, ROLES } = require("../middlewares/authContext");
 const { ValidationError, AuthError } = require("../errors");
 const { userDataValidator, idValidator, postDataValidator, commentDataValidator } = require("../middlewares/validators");
 
@@ -59,6 +59,7 @@ pagesRouter.route("/signup")
 pagesRouter.get("/logout", authDestroySessionAndRedirect())
 
 pagesRouter.get("/my-posts",
+    restrictResource([ROLES.admin, ROLES.user]),
     pagesController.checkAuth,
     pagesController.getUserPosts,
     pagesController.renderPage("pages/my-posts")
@@ -72,6 +73,7 @@ pagesRouter.get("/post-details/:postId",
 
 pagesRouter.route("/add-post")
     .all(
+        restrictResource([ROLES.admin, ROLES.user]),
         pagesController.checkAuth
     )
     .get(pagesController.renderPage("pages/add-post"))
@@ -84,6 +86,7 @@ pagesRouter.route("/add-post")
     )
 
 pagesRouter.post("/add-comment",
+    restrictResource([ROLES.admin, ROLES.user]),
     pagesController.checkAuth,
     formDataParser,
     commentDataValidator,
