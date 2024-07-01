@@ -10,6 +10,7 @@ mixin CommentItem({ comment })
                     span=comment.author.username 
                     span=comment.createdAt.toUTCString()
             .comment__service 
-                +DeleteButton(comment)
+                if (comment.author.id === userId || role === "admin")
+                    +DeleteButton(comment)
         .comment__content
             span=comment.comment

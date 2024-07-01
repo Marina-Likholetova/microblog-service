@@ -16,7 +16,8 @@ mixin PostItem({ post, withActionPanel, isPostDetails })
                         span=post.createdAt.toUTCString()
                 if withActionPanel
                     .post__service
-                        +DeleteButton(post)
+                        if (post.author.id === userId || role === "admin")
+                            +DeleteButton(post)
             h3.post__title=post.title 
             .post__content
                 p=post.content

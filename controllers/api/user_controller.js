@@ -22,7 +22,7 @@ async function createNewUser(req, resp) {
 async function getUserById(req, resp) {
     const { userId } = req.params;
 
-    const user = await service.getUserById(userId);
+    const user = await service.user.getUserById(userId);
     resp.json(user);
 }
 

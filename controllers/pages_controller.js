@@ -88,6 +88,28 @@ async function createNewComment(req, resp, next) {
     }
 }
 
+async function getAllUsers(req, _resp, next) {
+    const usersList = await service.user.getAllUsers();
+
+    req.__pageContext.usersList = usersList;
+
+    next();
+}
+
+
+async function getUserById(req, _resp, next) {
+    try {
+        const { userId } = req.params;
+
+        const user = await service.user.getUserById(userId);
+        req.__pageContext.user = user;
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     addPageContext,
     renderPage,
@@ -97,4 +119,7 @@ module.exports = {
     createNewPost,
     createNewComment,
     checkAuth,
+    getAllUsers,
+    getUserById
+
 };

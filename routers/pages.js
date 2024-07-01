@@ -97,6 +97,20 @@ pagesRouter.post("/add-comment",
     }
 )
 
+pagesRouter.route("/admin-page")
+    .get(
+        restrictResource([ROLES.admin]),
+        pagesController.getAllUsers,
+        pagesController.renderPage("pages/admin"))
+
+
+pagesRouter.route("/user-details/:userId")
+    .get(
+        restrictResource([ROLES.admin]),
+        idValidator.userId,
+        pagesController.getUserById,
+        pagesController.renderPage("pages/user-details"))
+
 pagesRouter.use(pagesController.renderPage("pages/404"));
 
 pagesRouter.use((err, _req, resp, _next) => {

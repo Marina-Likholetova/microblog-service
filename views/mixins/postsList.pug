@@ -1,11 +1,10 @@
 include postItem
-include commentForm
-include commentItem
-include commentsList
-include deleteButton
 
 mixin PostsList(props)
     ul.postsList
-        each post in postsList
-            li
-                +PostItem({ post , ...props})
+        if postsList.length > 0
+            each post in postsList
+                li
+                    +PostItem({ post , ...props})
+            else 
+                p No posts yet

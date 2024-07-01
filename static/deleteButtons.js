@@ -48,3 +48,20 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
 document.addEventListener('click', function () {
     document.querySelectorAll('.dropdown-menu').forEach(menu => menu.style.display = 'none');
 });
+
+document.querySelectorAll(".user__service .delete-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        const { id } = e.target.dataset;
+        const url = window.location.href;
+
+        const api = `/api/users/${id}`;
+
+        fetch(api, {
+            method: "DELETE",
+        })
+            .then(() => {
+                window.location.href = url;
+            })
+            .catch((err) => console.log("error: ", err.message));
+    })
+});

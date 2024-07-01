@@ -1,0 +1,18 @@
+extends ../layouts/main-layout.pug
+
+include ../mixins/deleteButton
+
+block mainContent
+        .user 
+            .user__header
+                img.author__avatar(src=user.user_avatar, alt="User Avatar")
+                .author__details
+                    span=user.username
+                    span=user.role
+            .user__info 
+                span=`Created: ${user.createdAt.toUTCString()}`
+                span=`Posts: ${user.posts.length}`
+                span=`Comments: ${user.comments.length}`
+            .user__service
+                +DeleteButton(user)
+        

@@ -15,6 +15,8 @@ html(lang="en")
                     a(href="/blog") Home Page
                     a(href="/blog/my-posts") My Posts
                     if isLoggedIn === true
+                        if role === "admin" 
+                            a(href="/blog/admin-page") Admin Page
                         span=`Hi, ${username}`
                         a(href="/blog/logout") Logout
                     else

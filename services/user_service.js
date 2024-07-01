@@ -17,7 +17,13 @@ function getUserService(prisma, errorHandler) {
     }
 
     async function getUserById(id) {
-        const userById = await prisma.user.findUnique({ where: { id } });
+        const userById = await prisma.user.findUnique({
+            where: { id },
+            include: {
+                posts: true,
+                comments: true,
+            },
+        });
 
         if (!userById) throw new NotFoundError({ msg: "User not found" });
 
