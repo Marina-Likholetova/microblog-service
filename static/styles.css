@@ -8,6 +8,8 @@ body {
 
 ul {
     list-style-type: none;
+    margin: 0 0;
+    padding: 0 0;
 }
 
 .container {
@@ -46,16 +48,16 @@ ul {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-ul.postsList {
-    padding: 0;
+.tx-cen {
+    text-align: center;
 }
 
-.post {
+.post, .user {
     border-bottom: 1px solid #ddd;
     padding: 15px 0;
 }
 
-.post__info {
+.post__info, .user__info {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     background-color: #e1f2fe;
@@ -63,7 +65,8 @@ ul.postsList {
     position: relative;
 }
 
-.post__info a {
+.post__info a,
+.user__info a {
     position: absolute;
     z-index: 0;
     width: 100%;
@@ -76,7 +79,8 @@ ul.postsList {
 }
 
 .post__header,
-.comment__info {
+.comment__info,
+.user__header {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
@@ -85,21 +89,25 @@ ul.postsList {
 }
 
 .post__header :first-child,
-.comment__info :first-child {
+.comment__info :first-child,
+.user__header :first-child {
     grid-column: span 1;
 }
 
 .post__header :nth-child(2),
-.comment__info :nth-child(2) {
+.comment__info :nth-child(2),
+.user__header :nth-child(2) {
     grid-column: span 1;
     justify-self: end;
 }
 
-.post__author {
+.post__author,
+.user__author {
     display: flex;
     align-items: center;
     grid-column: span 1;
 }
+
 
 .author__avatar {
     width: 40px;
@@ -118,6 +126,37 @@ ul.postsList {
 
 .author__details span:first-child {
     font-size: 1em;
+}
+
+
+.user__details {
+    display: grid;
+    padding: 20px;
+    grid-template-columns: 1fr 10fr;  
+}
+
+.user__details-row {
+    display: contents;  
+}
+
+.user__details-header, .user__details-body {
+    padding: 10px;
+    /* border: 1px solid #ccc; */
+    /* background-color: #ebcde7; */
+    text-align: left;  
+}
+
+.user__details-header span {
+    /* border: 1px solid #e0e0e0; */
+    border: 2px solid #886c5d57;
+    font-weight: bold;
+    background-color: #f9f4f4;
+    border-radius: calc(0.5 * 27px);
+    padding: 5px;
+}
+
+.post__comments {
+    margin-left: calc(0.5 * 3rem);
 }
 
 .comment {

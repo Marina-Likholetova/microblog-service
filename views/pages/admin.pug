@@ -1,24 +1,6 @@
 extends ../layouts/main-layout.pug
 
-include ../mixins/deleteButton
+include ../mixins/usersList
 
 block mainContent
-    ul.usersList
-        if usersList.length > 0
-            each user in usersList
-                li
-                    .user 
-                        a(href=`/blog/user-details/${user.id}`)
-                        .user__header
-                            img.author__avatar(src=user.user_avatar, alt="User Avatar")
-                            .author__details
-                                span=user.username
-                                span=user.role
-                        .user__info 
-                            span=`Created: ${user.createdAt.toUTCString()}`
-                            span=`Posts: ${user.posts.length}`
-                            span=`Comments: ${user.comments.length}`
-                        .user__service
-                            +DeleteButton(user)
-            else 
-                p No users yet
+    +UsersList()
