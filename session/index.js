@@ -17,7 +17,7 @@ const sessionMiddleware = session({
     cookie: {
         httpOnly: true,
         sameSite: "strict",
-        secure: sessionConfig.secureCookie,
+        secure: false,
     },
 });
 
