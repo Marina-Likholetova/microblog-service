@@ -15,10 +15,14 @@ const postPrismaOptions = {
 
 function getPostService(prisma, errorHandler) {
     async function getAllPosts() {
-        return await prisma.post.findMany({
-            ...postPrismaOptions.orderOptions,
-            ...postPrismaOptions.includeOptions
-        });
+        try {
+            return await prisma.post.findMany({
+                ...postPrismaOptions.orderOptions,
+                ...postPrismaOptions.includeOptions
+            });
+        } catch (error) {
+            errorHandler(error)
+        }
     }
 
     async function getPostById(id) {
@@ -27,17 +31,21 @@ function getPostService(prisma, errorHandler) {
             ...postPrismaOptions.includeOptions,
         });
 
-        if (!postById) throw new NotFoundError({ msg: "Post not found" });
+        if (!postById) throw new NotFoundError({ msg: `Post by ${id} not found` });
 
         return postById;
     }
 
     async function getUserPosts(userId) {
-        return await prisma.post.findMany({
-            where: { authorId: userId },
-            ...postPrismaOptions.orderOptions,
-            ...postPrismaOptions.includeOptions
-        });
+      try {
+          return await prisma.post.findMany({
+              where: { authorId: userId },
+              ...postPrismaOptions.orderOptions,
+              ...postPrismaOptions.includeOptions
+          });
+      } catch (error) {
+          errorHandler(error);
+      }
     }
 
     async function createNewPost(data) {

@@ -2,15 +2,23 @@ const { NotFoundError } = require("../errors");
 
 function getCommentService(prisma, errorHandler) {
     async function getAllComments() {
-        return await prisma.comment.findMany();
+        try {
+            return await prisma.comment.findMany();
+        } catch (error) {
+            errorHandler(error);
+        }
     }
 
     async function getCommentById(id) {
-        const commentById = await prisma.comment.findUnique({ where: { id } });
+        try {
+            const commentById = await prisma.comment.findUnique({ where: { id } });
 
-        if (!commentById) throw new NotFoundError({ msg: "Comment not found" });
+            if (!commentById) throw new NotFoundError({ msg: `Comment by ${id} not found` });
 
-        return commentById;
+            return commentById;
+        } catch (error) {
+            errorHandler(error);
+        }
     }
 
     async function createNewComment(data) {
@@ -42,7 +50,7 @@ function getCommentService(prisma, errorHandler) {
         getCommentById,
         createNewComment,
         updateComment,
-        deleteCommentById
+        deleteCommentById,
     };
 }
 

@@ -5,12 +5,14 @@ const formDataParser = express.urlencoded({ extended: false });
 const pagesController = require("../controllers/pages_controller");
 const { logUserIn, signUserUp } = require("../controllers/auth_controller");
 const { authIniteSessionAndRedirect, authDestroySessionAndRedirect, restrictResource, ROLES } = require("../middlewares/authContext");
-const { ValidationError, AuthError } = require("../errors");
+const { ValidationError, AuthError, NotFoundError } = require("../errors");
 const { userDataValidator, idValidator, postDataValidator, commentDataValidator } = require("../middlewares/validators");
+const logger = require("../utils/logger")("pages router");
 
 
 async function formErrorHandler(err, req, _resp, next) {
     if (err instanceof ValidationError || err instanceof AuthError) {
+        logger.error(err.message, err);
     
         req.__pageContext = {
             ...req.__pageContext,
@@ -19,8 +21,18 @@ async function formErrorHandler(err, req, _resp, next) {
         }
 
         delete req.__pageContext.data.password; 
+        logger.info("Saved metadata in context:", req.__pageContext);
 
         return next();
+    }
+
+    next(err);
+}
+
+function notFoundItemErrorHandler(err, req, resp, next) {
+    if (err instanceof NotFoundError) {
+        logger.error(err.message);
+        return resp.redirect(`${req.baseUrl}/404`);
     }
 
     next(err);
@@ -68,7 +80,8 @@ pagesRouter.get("/my-posts",
 pagesRouter.get("/post-details/:postId",
     idValidator.postId,
     pagesController.getPostById,
-    pagesController.renderPage("pages/post-details")
+    pagesController.renderPage("pages/post-details"),
+    notFoundItemErrorHandler
 )
 
 pagesRouter.route("/add-post")
@@ -91,17 +104,15 @@ pagesRouter.post("/add-comment",
     formDataParser,
     commentDataValidator,
     pagesController.createNewComment,
-    formErrorHandler,
-    (_req, resp, _next) => {
-        resp.redirect("back")
-    }
+    formErrorHandler
 )
 
 pagesRouter.route("/admin-page")
     .get(
         restrictResource([ROLES.admin]),
         pagesController.getAllUsers,
-        pagesController.renderPage("pages/admin"))
+        pagesController.renderPage("pages/admin")
+    )
 
 
 pagesRouter.route("/user-details/:userId")
@@ -109,11 +120,15 @@ pagesRouter.route("/user-details/:userId")
         restrictResource([ROLES.admin]),
         idValidator.userId,
         pagesController.getUserById,
-        pagesController.renderPage("pages/user-details"))
+        pagesController.renderPage("pages/user-details"),
+        notFoundItemErrorHandler
+    )
 
 pagesRouter.use(pagesController.renderPage("pages/404"));
 
 pagesRouter.use((err, _req, resp, _next) => {
+    logger.error("Unexpected server error", err);
+
     resp.render("pages/500");
 });
 

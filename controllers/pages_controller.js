@@ -1,13 +1,20 @@
 const { AuthError } = require("../errors");
 const service = require("../services");
+const logger = require("../utils/logger")("pages controller");
 
 function addPageContext(req, _resp, next) {
-    const { context } = req.session || {};
+    const { context = {} } = req.session || {};
+    const role = context.role || "unauthorized";
+    const username = context.username || "anonymous";
 
     req.__pageContext = {
         isLoggedIn: !!context?.role,
+        role,
+        username,
         ...context,
     };
+
+    logger.info(`Page context for [${role}] - [${username}] added!`);
 
     next();
 }
@@ -31,11 +38,15 @@ function renderPage(templateName) {
 }
 
 async function getAllPosts(req, _resp, next) {
-    const postsList = await service.post.getAllPosts();
+    try {
+        const postsList = await service.post.getAllPosts();
 
-    req.__pageContext.postsList = postsList;
+        req.__pageContext.postsList = postsList;
 
-    next();
+        next();
+    } catch (error) {
+        next(error);
+    }
 }
 
 async function createNewPost(req, resp, next) {
@@ -89,13 +100,16 @@ async function createNewComment(req, resp, next) {
 }
 
 async function getAllUsers(req, _resp, next) {
-    const usersList = await service.user.getAllUsers();
+    try {
+        const usersList = await service.user.getAllUsers();
 
-    req.__pageContext.usersList = usersList;
+        req.__pageContext.usersList = usersList;
 
-    next();
+        next();
+    } catch (error) {
+        next(error);
+    }
 }
-
 
 async function getUserById(req, _resp, next) {
     try {
@@ -121,5 +135,5 @@ module.exports = {
     checkAuth,
     getAllUsers,
     getUserById
-
+    
 };

@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { PrismaClientKnownRequestError } = require("@prisma/client/runtime/library");
+const { PrismaClientKnownRequestError, PrismaClientInitializationError } = require("@prisma/client/runtime/library");
 const { NotFoundError, ValidationError, AuthError } = require("../errors")
 
 const prisma = new PrismaClient();
@@ -15,6 +15,10 @@ function handlePrismaError(err) {
         throw err;
     }
 
+    if (err instanceof PrismaClientInitializationError) {
+        throw new Error("PrismaClient error: check database connection");
+    }
+
     if (err.code === "P2025") {
         throw new NotFoundError({ msg: `${err.meta.modelName} not found` });
     } else if (err.code === "P2002") {
@@ -25,9 +29,7 @@ function handlePrismaError(err) {
         });
 
         throw new ValidationError({ msg: `Duplicate ${err.meta.modelName} entry` });
-    } else {
-        throw new Error(err.message);
-    }
+    } 
 }
 
 

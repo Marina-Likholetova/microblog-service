@@ -2,18 +2,26 @@ const { NotFoundError } = require("../errors");
 
 function getUserService(prisma, errorHandler) {
     async function getAllUsers() {
-        return await prisma.user.findMany({
-            include: {
-                posts: { select: { id: true } },
-                comments: { select: { id: true } },
-            },
-        });
+        try {
+            return await prisma.user.findMany({
+                include: {
+                    posts: { select: { id: true } },
+                    comments: { select: { id: true } },
+                },
+            });
+        } catch (error) {
+            errorHandler(error);
+        }
     }
 
     async function getUserByName(username) {
-        return await prisma.user.findUnique({
-            where: { username },
-        });
+        try {
+            return await prisma.user.findUnique({
+                where: { username },
+            });
+        } catch (error) {
+            errorHandler(error);
+        }
     }
 
     async function getUserById(id) {
@@ -25,7 +33,7 @@ function getUserService(prisma, errorHandler) {
             },
         });
 
-        if (!userById) throw new NotFoundError({ msg: "User not found" });
+        if (!userById) throw new NotFoundError({ msg: `User by ${id} not found` });
 
         return userById;
     }
