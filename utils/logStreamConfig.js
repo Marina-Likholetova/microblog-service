@@ -16,7 +16,7 @@ const generator = (time, index) => {
 
 const serverLogDirectory = path.join(process.cwd(), "logs", "server-logs");
 
-fs.existsSync(serverLogDirectory) || fs.mkdirSync(serverLogDirectory);
+fs.existsSync(serverLogDirectory) || fs.mkdirSync(serverLogDirectory, { recursive: true });
 
 const stream = rfs.createStream(generator, {
     path: serverLogDirectory,
