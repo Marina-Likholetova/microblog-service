@@ -32,6 +32,7 @@ model Post {
   authorId  String    @db.ObjectId
   author    User      @relation(fields: [authorId], references: [id])
   comments  Comment[]
+  media     Media[]  
 }
 
 model Comment {
@@ -42,6 +43,20 @@ model Comment {
   author    User     @relation(fields: [authorId], references: [id])
   comment   String
   createdAt DateTime @default(now())
+}
+
+model Media {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  url       String  
+  type      MediaType
+  mimetype  String
+  postId    String   @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+enum MediaType {
+  image
+  video
 }
 
 enum Role {

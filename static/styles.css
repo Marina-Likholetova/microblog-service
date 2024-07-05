@@ -333,3 +333,9 @@ ul {
     color: rgb(215, 14, 14);
     margin: 10px 0;
 }
+
+.post__upload img {
+    max-width: calc(5 * 2em);
+    height: auto;
+    display: block;
+}

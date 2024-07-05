@@ -18,9 +18,11 @@ app.set('view engine', 'pug');
 app.use(morgan(mrgConfig.format));
 app.use(morgan(mrgConfig.format, { stream }));
 
+app.use(express.static("static"));
+
 app.use(sessionMiddleware);
 
-app.use(express.static("static"));
+app.use('/uploads', express.static(srvConfig.uploadsDir));
 
 app.use(express.json());
 
@@ -31,3 +33,8 @@ app.use("/api/comments", api.commentRouter);
 
 //pages
 app.use("/blog", pagesRouter)
+
+
+process.on('uncaughtException', (err) => {
+    console.error('There was an uncaught error', err);
+});

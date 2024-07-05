@@ -2,7 +2,7 @@ extends ../layouts/main-layout
 
 block mainContent 
     .form-container
-        form(method="POST")
+        form(method="POST" enctype="multipart/form-data")
             .group
                 label(for="title") Title
                 input(type="text" placeholder="enter the title" value=data && data.title name="title" required)
@@ -13,5 +13,10 @@ block mainContent
                 textarea(name="content", cols="30", rows="10") 
                 if errors && errors.content
                     .form-error= errors.content
+            .group
+                label(for="media") Upload media (optional)
+                input(type="file" name="upload" accept="image/*,video/*")
+                if errors && errors.media
+                    .form-error= errors.media
             button(type="submit" class="btn") Post
             button(type="reset" class="btn") Cancel

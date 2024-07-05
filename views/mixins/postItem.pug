@@ -21,6 +21,15 @@ mixin PostItem({ post, withActionPanel, isPostDetails })
             h3.post__title=post.title 
             .post__content
                 p=post.content
+            if post.media && post.media.length > 0 
+                each mediaItem in post.media
+                    .post__upload
+                        if mediaItem.type === 'image'
+                            img.upload__image(src=mediaItem.url, alt="Image")
+                        else if mediaItem.type === 'video'
+                            video.upload__video(width= '320' height= '240' controls)
+                                source(src=mediaItem.url, type=mediaItem.mimetype)
+                                p Your browser does not support the video tag.
         .post__comments
             h3 Comments
             +CommentsList({comments: post.comments})

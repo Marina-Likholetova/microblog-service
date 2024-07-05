@@ -7,6 +7,7 @@ const { logUserIn, signUserUp } = require("../controllers/auth_controller");
 const { authIniteSessionAndRedirect, authDestroySessionAndRedirect, restrictResource, ROLES } = require("../middlewares/authContext");
 const { ValidationError, AuthError, NotFoundError } = require("../errors");
 const { userDataValidator, idValidator, postDataValidator, commentDataValidator } = require("../middlewares/validators");
+const { fileParser } = require("../middlewares/fileParser");
 const logger = require("../utils/logger")("pages router");
 
 
@@ -91,7 +92,7 @@ pagesRouter.route("/add-post")
     )
     .get(pagesController.renderPage("pages/add-post"))
     .post(
-        formDataParser,
+        fileParser.single("upload"),
         postDataValidator,
         pagesController.createNewPost,
         formErrorHandler,

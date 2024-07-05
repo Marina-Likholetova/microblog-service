@@ -9,7 +9,7 @@ const postPrismaOptions = {
         ],
     },
     includeOptions: {
-        include: { author: true, comments: { include: { author: true } } }
+        include: { author: true, comments: { include: { author: true } }, media: true }
     }
 };
 
@@ -50,7 +50,19 @@ function getPostService(prisma, errorHandler) {
 
     async function createNewPost(data) {
         try {
-            return await prisma.post.create({ data });
+            return await prisma.$transaction(async (tx) => {
+                const postData = { ...data };
+
+                delete postData.media;
+
+                const post = await prisma.post.create({ data: postData });
+                
+                if (data.media) {
+                    await prisma.media.create({ data: { ...data.media, postId: post.id }})
+                }
+
+                return post
+            })
         } catch (error) {
             errorHandler(error);
         }
@@ -67,6 +79,10 @@ function getPostService(prisma, errorHandler) {
     async function deletePostById(id) {
         try {
             return await prisma.$transaction(async (tx) => {
+                await tx.media.deleteMany({
+                    where: { postId: id }
+                })
+
                 await tx.comment.deleteMany({
                     where: { postId: id },
                 });
