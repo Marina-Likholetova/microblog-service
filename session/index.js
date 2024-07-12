@@ -1,4 +1,3 @@
-require("dotenv").config();
 const { session: sessionConfig, db: dbConfig } = require("config");
 
 const session = require("express-session");

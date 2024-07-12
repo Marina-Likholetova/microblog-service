@@ -7,7 +7,7 @@ const morgan = require("morgan");
 const logger = require("./utils/logger")("server");
 const { stream } = require("./utils/logStreamConfig");
 const { sessionMiddleware } = require("./session");
-const { api } = require("./routers/api/");
+const apiRouters = require("./routers/api/");
 const { pagesRouter } = require("./routers/pages");
 
 const app = express();
@@ -27,9 +27,9 @@ app.use('/uploads', express.static(srvConfig.uploadsDir));
 app.use(express.json());
 
 //api
-app.use("/api/users", api.userRouter);
-app.use("/api/posts", api.postRouter);
-app.use("/api/comments", api.commentRouter);
+app.use("/api/users", apiRouters.userRouter);
+app.use("/api/posts", apiRouters.postRouter);
+app.use("/api/comments", apiRouters.commentRouter);
 
 //pages
 app.use("/blog", pagesRouter)
