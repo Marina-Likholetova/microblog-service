@@ -3,8 +3,6 @@ const { ObjectId } = require("mongodb");
 
 const { ValidationError } = require("../errors");
 
-const { db: dbConfig } = require("config");
-
 yup.setLocale({
     mixed: {
         notType: "${path} must be a valid ${type}",
@@ -29,9 +27,16 @@ const userDataSchema = yup.object().shape({
     password: baseStringSchema.min(2),
 });
 
+const mediaDataSchema = yup.object().shape({
+    type: yup.string().oneOf(["image", "video"]),
+    mimetype: baseStringSchema,
+    url: baseStringSchema
+})
+
 const postDataSchema = yup.object().shape({
     title: trimedStringSchema,
     content: trimedStringSchema,
+    media: mediaDataSchema.notRequired().default(undefined)
 });
 
 const commentDataSchema = yup.object().shape({
@@ -44,16 +49,10 @@ const objectIdSchema = yup
     .required()
     .test("is-valid-object-id", "${path} is not a valid ObjectId", (value) => ObjectId.isValid(value));
 
-const idSchemaSql = yup.number().typeError().required().positive().integer();
-
-const idSchema = {
-    sql: idSchemaSql,
-    mongo: objectIdSchema,
-};
 
 const validateIdParam = (idParam) => async (req, _resp, next) => {
     try {
-        const parsed = await idSchema[dbConfig.dbType].validate(req.params[idParam]);
+        const parsed = await objectIdSchema.validate(req.params[idParam]);
         req.params[idParam] = parsed;
         next();
     } catch (err) {
