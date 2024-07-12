@@ -13,7 +13,7 @@ mixin PostItem({ post, withActionPanel, isPostDetails })
                         img.author__avatar(src=post.author.user_avatar || defaultImg, alt="Author Avatar")
                     .author__details
                         span=post.author.username
-                        span=post.createdAt.toUTCString()
+                        span=post.created_at.toUTCString()
                 if withActionPanel
                     .post__service
                         if (post.author.id === userId || role === "admin")

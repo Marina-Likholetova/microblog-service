@@ -8,7 +8,7 @@ mixin CommentItem({ comment })
                     img.author__avatar(src=comment.author.user_avatar || defaultImg, alt="Author Avatar")
                 .author__details
                     span=comment.author.username 
-                    span=comment.createdAt.toUTCString()
+                    span=comment.created_at.toUTCString()
             .comment__service 
                 if (comment.author.id === userId || role === "admin")
                     +DeleteButton(comment)

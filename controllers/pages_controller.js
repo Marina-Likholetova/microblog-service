@@ -53,7 +53,7 @@ async function createNewPost(req, resp, next) {
     try {
         const { userId } = req.__pageContext;
 
-        await service.post.createNewPost({ ...req.body, authorId: userId });
+        await service.post.createNewPost({ ...req.body, author_id: userId });
 
         resp.redirect(req.baseUrl);
     } catch (error) {
@@ -91,7 +91,7 @@ async function createNewComment(req, resp, next) {
     try {
         const { userId } = req.__pageContext;
 
-        await service.comment.createNewComment({ ...req.body, authorId: userId });
+        await service.comment.createNewComment({ ...req.body, author_id: userId });
 
         resp.redirect("back");
     } catch (error) {

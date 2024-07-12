@@ -4,7 +4,7 @@ const postPrismaOptions = {
     orderOptions: {
         orderBy: [
             {
-                createdAt: "desc",
+                created_at: "desc",
             }
         ],
     },
@@ -39,7 +39,7 @@ function getPostService(prisma, errorHandler) {
     async function getUserPosts(userId) {
       try {
           return await prisma.post.findMany({
-              where: { authorId: userId },
+              where: { author_id: userId },
               ...postPrismaOptions.orderOptions,
               ...postPrismaOptions.includeOptions
           });
@@ -50,18 +50,11 @@ function getPostService(prisma, errorHandler) {
 
     async function createNewPost(data) {
         try {
-            return await prisma.$transaction(async (tx) => {
-                const postData = { ...data };
-
-                delete postData.media;
-
-                const post = await prisma.post.create({ data: postData });
-                
-                if (data.media) {
-                    await prisma.media.create({ data: { ...data.media, postId: post.id }})
+            return await prisma.post.create({
+                data: {
+                    ...data,
+                    ...(data.media ? { media: { create: {...data.media } } } : {})
                 }
-
-                return post
             })
         } catch (error) {
             errorHandler(error);
@@ -80,11 +73,11 @@ function getPostService(prisma, errorHandler) {
         try {
             return await prisma.$transaction(async (tx) => {
                 await tx.media.deleteMany({
-                    where: { postId: id }
+                    where: { post_id: id }
                 })
 
                 await tx.comment.deleteMany({
-                    where: { postId: id },
+                    where: { post_id: id },
                 });
 
                 const post = await tx.post.delete({

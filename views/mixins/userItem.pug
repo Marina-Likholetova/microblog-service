@@ -14,7 +14,7 @@ mixin UserItem({user})
                     .user__service
                         +DeleteButton(user)
             .user__details
-                each val, index in [["Created At", user.createdAt.toUTCString()], ["Posts", user.posts.length], ["Comments", user.comments.length]]
+                each val, index in [["Created At", user.created_at.toUTCString()], ["Posts", user.posts.length], ["Comments", user.comments.length]]
                     .user__details-row
                         .user__details-header 
                             span=val[0]

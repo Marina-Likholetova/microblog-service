@@ -58,11 +58,11 @@ function getUserService(prisma, errorHandler) {
         try {
             return await prisma.$transaction(async (tx) => {
                 await tx.comment.deleteMany({
-                    where: { authorId: id },
+                    where: { author_id: id },
                 });
 
                 await tx.post.deleteMany({
-                    where: { authorId: id },
+                    where: { author_id: id },
                 });
 
                 const user = await tx.user.delete({
