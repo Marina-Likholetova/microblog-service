@@ -1,13 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const service = require("../../services");
-
-const withAsyncHandler = (fn) => async (req, resp, next) => {
-    try {
-        await fn(req, resp, next);
-    } catch (err) {
-        next(err);
-    }
-};
+const { withAsyncHandler } = require("../../helpers/withAsyncHandler");
 
 async function getAllComments(_req, resp) {
     const comments = await service.comment.getAllComments();
